@@ -1,0 +1,28 @@
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Virtual environments
+venv/
+.venv/
+
+# Environment variables and credentials
+.env
+.env.*
+
+# Temporary files
+*.log
+*.tmp
+
+# Large transaction datasets
+*.csv
+*.parquet
+
+# Python build files
+build/
+dist/
+*.egg-info/
