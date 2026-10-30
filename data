@@ -1,0 +1,28 @@
+# Data – Credit Card Transactions Analysis
+
+## Dataset Description
+
+This project uses a credit card transactions dataset containing **1,296,675 records and 24 columns**.
+
+The dataset includes transaction dates, transaction amounts, merchant categories, customer locations, and fraud indicators.
+
+## Data Quality
+
+- Total Records: 1,296,675
+- Total Columns: 24
+- Missing Values Identified: 195,952
+- Fraud Indicator: `is_fraud`
+
+## Dataset Availability
+
+Due to the large file size, the original CSV dataset is not included in this GitHub repository.
+
+The dataset was processed locally using Python and Jupyter Notebook, with SQL Server used for transaction analysis and Power BI for visualization.
+
+## Purpose
+
+The dataset supports fraud detection, transaction trend analysis, customer spending analysis, and identification of high-risk merchant categories.
+
+## Note
+
+The original dataset is excluded from the repository to reduce storage requirements and avoid uploading transaction-level information.
