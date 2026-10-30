@@ -1,1 +1,115 @@
+A. Verify Table Name
 
+The SQL verification checks that the credit card transaction tables exist and confirms the number of records stored in each table. The expected 1,296,675 transactions should match the original dataset, indicating that the data was successfully imported and is ready for further analysis.
+
+--#1. Check Table Names and Table Numbers:SQL Table and Row Count Verification – Interpretation
+
+SELECT
+    TABLE_SCHEMA,
+    TABLE_NAME
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_TYPE = 'BASE TABLE'
+ORDER BY TABLE_NAME;
+
+SELECT
+    s.name AS SchemaName,
+    t.name AS TableName,
+    SUM(p.rows) AS TotalRows
+FROM sys.tables AS t
+INNER JOIN sys.schemas AS s
+    ON t.schema_id = s.schema_id
+INNER JOIN sys.partitions AS p
+    ON t.object_id = p.object_id
+WHERE p.index_id IN (0, 1)
+GROUP BY
+    s.name,
+    t.name
+ORDER BY
+    t.name;
+
+TABLE_SCHEMA	TABLE_NAME
+dbo	credit_card_transactions_clean
+dbo	credit_card_transactions_clean_retry
+dbo	sysdiagrams
+
+SchemaName	TableName	TotalRows
+dbo	credit_card_transactions_clean	1296675
+dbo	credit_card_transactions_clean_retry	1296675
+dbo	sysdiagrams	0
+
+B. Main Fraud KPI Query
+
+Main Fraud KPI Query – Interpretation
+The SQL query measures total transactions, total spending, fraudulent transactions, fraud amount, and fraud rate. These KPIs help identify fraud activity, assess financial risk, and monitor transaction patterns to support fraud detection and business decisions.
+
+--#3. Overall metrics and data quality
+
+SELECT
+    COUNT_BIG(*) AS transaction_count,
+    SUM(CASE WHEN is_fraud = 1 THEN 1 ELSE 0 END) AS fraud_labeled_count,
+    CAST(
+        100.0 * SUM(CASE WHEN is_fraud = 1 THEN 1 ELSE 0 END)
+        / NULLIF(COUNT_BIG(*), 0) AS decimal(8,3)
+    ) AS fraud_rate_pct,
+    CAST(AVG(amount) AS decimal(18,2)) AS average_transaction_amount,
+    CAST(SUM(amount) AS decimal(20,2)) AS total_amount,
+    MIN(transaction_datetime) AS first_transaction,
+    MAX(transaction_datetime) AS last_transaction,
+    SUM(CASE WHEN transaction_datetime IS NULL THEN 1 ELSE 0 END) AS invalid_or_missing_datetime,
+    SUM(CASE WHEN amount IS NULL THEN 1 ELSE 0 END) AS invalid_or_missing_amount,
+    SUM(CASE WHEN is_fraud IS NULL THEN 1 ELSE 0 END) AS invalid_or_missing_fraud_label
+FROM dbo.v_credit_card_transactions_clean;
+GO
+--Output--
+transaction_count	fraud_labeled_count	fraud_rate_pct	average_transaction_amount	total_amount		invalid_or_missing_datetime	invalid_or_missing_amount	invalid_or_missing_fraud_label
+   1296675		            7506              0.579	           70.35	                   1222428.90	                0                    0                          1289169
+
+C. Fraud by Merchant Category
+
+Fraud by Merchant Category – Interpretation
+
+The SQL query identifies which merchant categories have the highest number of fraudulent transactions and fraud rates. This analysis helps identify high-risk spending categories, detect fraud patterns, and improve fraud prevention strategies.
+
+--4. Fraud label rate by Category
+
+SELECT
+    DATEPART(hour, transaction_datetime) AS transaction_hour,
+    COUNT_BIG(*) AS transaction_count,
+    SUM(CASE WHEN is_fraud = 1 THEN 1 ELSE 0 END) AS fraud_labeled_count,
+    CAST(100.0 * SUM(CASE WHEN is_fraud = 1 THEN 1 ELSE 0 END)
+         / NULLIF(COUNT_BIG(*), 0) AS decimal(10,3)) AS fraud_rate_pct
+FROM dbo.v_credit_card_transactions_clean
+WHERE transaction_datetime IS NOT NULL
+GROUP BY DATEPART(hour, transaction_datetime)
+ORDER BY transaction_hour;
+GO
+
+--Output--
+
+transaction_hour	transaction_count	fraud_labeled_count	fraud_rate_pct
+    0	                   42502	              635               	1.494
+ 
+    1	                   42869              	658	                1.535
+
+	  2                    42656	             	625                 1.465
+    3	                   42769	              609                	1.424
+    4	                   41863	              46	                0.110
+		5	                   42171                60                  0.142
+		6                    42300	              40                  0.095
+	  7	                   42203	              56                  0.133
+		8	                   42505                49                  0.115
+		9                    42185	              47                  0.111
+	  10                   42271	              40                  0.095
+		11                   42082	              42                  0.100
+		12	                 65257                67                  0.103
+		13	                 65314                80                  0.122
+		14                   64885	              86                  0.133
+		15	                 65391                79                  0.121
+		16	                 65726                76                  0.116
+		17                   65450                78                  0.119
+		18	                 66051                81                  0.123
+		19	                 65508                81                  0.124
+		20                   65098                62	                0.095
+		21                   65533                74                 	0.113
+	  22                   66982	              1931              	2.883
+	  23	                 67104	              1904                2.837
