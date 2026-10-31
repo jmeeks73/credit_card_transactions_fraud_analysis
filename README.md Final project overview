@@ -1,0 +1,226 @@
+# Credit Card Transactions Analysis | Python, SQL Server & Power BI
+
+## Project Overview
+
+This project analyzes **1,296,675 credit card transactions** to identify fraud patterns, evaluate customer spending behavior, and generate business insights.
+
+The project demonstrates an end-to-end data analytics workflow using Python for data extraction, transformation, and cleaning (ETL), Microsoft SQL Server for data analysis, and Power BI for interactive dashboards.
+
+**Project Objectives:**
+- Analyze over 1.29 million credit card transactions.
+- Identify fraudulent and legitimate transactions.
+- Examine spending trends by category, state, and time.
+- Calculate key fraud metrics and transaction statistics.
+- Develop interactive Power BI dashboards.
+- Provide data-driven business recommendations.
+
+## Dataset Description
+
+The dataset contains **1,296,675 records and 24 original columns**.
+
+Key fields include:
+
+| Column | Description |
+|---|---|
+| trans_date_trans_time | Transaction date and time |
+| cc_num | Credit card account identifier |
+| merchant | Merchant associated with transaction |
+| category | Merchant spending category |
+| amt | Transaction amount |
+| gender | Customer gender |
+| city | Customer city |
+| state | Customer state |
+| job | Customer occupation |
+| dob | Customer date of birth |
+| trans_num | Unique transaction identifier |
+| is_fraud | Fraud indicator (1 = Fraud, 0 = Legitimate) |
+
+The full dataset is not included in this repository because of its large size. The project includes code, analysis, documentation, and dashboard materials.
+
+## Technologies Used
+
+- **Python:** Pandas, NumPy, and PyArrow
+- **Jupyter Notebook:** Data extraction, cleaning, and exploratory analysis
+- **Microsoft SQL Server:** Data storage and SQL analysis
+- **SQL:** Aggregation, filtering, grouping, and business queries
+- **Power BI:** Data visualization and KPI reporting
+- **DAX:** Calculated measures and fraud metrics
+- **GitHub:** Version control and project documentation
+
+## 1. Python ETL and Data Preparation
+
+Python was used to extract, inspect, clean, and transform the credit card transaction dataset.
+
+### Key Activities
+- Loaded the CSV file into Jupyter Notebook.
+- Verified dataset dimensions and column names.
+- Examined missing values and duplicate records.
+- Reviewed data types and transaction amounts.
+- Converted date fields for time-based analysis.
+- Prepared data for SQL Server and Power BI.
+
+### Data Validation
+
+The original dataset contains:
+- **Total Records:** 1,296,675
+- **Original Columns:** 24
+
+The cleaning process included checking data quality and preparing a consistent dataset for analysis.
+
+## 2. SQL Server Analysis
+
+Microsoft SQL Server was used to perform business analysis of credit card transactions.
+
+### SQL Business Queries
+
+1. Total transaction count
+2. Total transaction spending
+3. Average transaction amount
+4. Total fraudulent transactions
+5. Overall fraud rate
+6. Fraud by merchant category
+7. Fraud by state
+8. Monthly transaction trends
+9. Transaction activity by hour
+10. Fraudulent versus legitimate transactions
+
+### SQL Analysis Objectives
+
+- Identify transaction and fraud patterns.
+- Compare fraud activity across spending categories.
+- Evaluate geographic differences in transaction fraud.
+- Summarize financial activity using SQL aggregation.
+- Support business decision-making through transaction analysis.
+
+## 3. Power BI Dashboard
+
+Power BI was used to develop an interactive dashboard displaying transaction activity, fraud risk, and spending behavior.
+
+### Key Performance Indicators (KPIs)
+
+| KPI | Description |
+|---|---|
+| Total Transactions | Number of transactions analyzed |
+| Total Spending | Combined value of transactions |
+| Average Transaction | Average transaction amount |
+| Fraud Transactions | Number of transactions flagged as fraud |
+| Fraud Rate | Percentage of fraudulent transactions |
+| Fraud Amount | Total transaction value associated with fraud |
+
+### Dashboard Visualizations
+
+- **KPI Cards:** Transaction totals, spending, fraud counts, and fraud percentage.
+- **Bar Chart:** Spending by merchant category.
+- **Column Chart:** Fraudulent transactions by category.
+- **Hourly Analysis:** Transaction or fraud activity by hour.
+- **State Comparison:** Fraud rates across states.
+- **Donut Chart:** Fraudulent versus legitimate transactions.
+- **Trend Analysis:** Transaction activity over time.
+
+### DAX Measures
+
+Fraud Rate:
+
+```dax
+Fraud Rate =
+DIVIDE(
+    CALCULATE(
+        COUNTROWS('credit_card_transactions (1)'),
+        'credit_card_transactions (1)'[is_fraud] = 1
+    ),
+    COUNTROWS('credit_card_transactions (1)'),
+    0
+)
+```
+
+The fraud rate measure calculates the proportion of transactions identified as fraudulent within the selected report filters.
+
+## 4. Key Business Findings
+
+### Transaction Activity
+The dataset provides a large transaction history for evaluating spending patterns, financial activity, and transaction frequency.
+
+### Fraud Monitoring
+Fraud indicators allow fraudulent transactions to be compared against legitimate activity.
+
+### Merchant Category Analysis
+Merchant category comparisons can help identify spending categories requiring additional fraud monitoring.
+
+### Geographic Analysis
+State-level fraud analysis helps evaluate geographic patterns. Fraud rates should be interpreted alongside transaction counts, since small transaction volumes can produce unusually high percentages.
+
+### Time-Based Analysis
+Transaction analysis by month and hour can identify periods of higher transaction activity and support further investigation of fraud patterns.
+
+## 5. Business Recommendations
+
+1. **Improve Fraud Monitoring:** Use fraud indicators and transaction patterns to support detection and investigation.
+
+2. **Monitor High-Risk Categories:** Review merchant categories with elevated fraud rates and meaningful transaction volumes.
+
+3. **Evaluate Geographic Trends:** Compare state-level fraud rates while considering the number of transactions.
+
+4. **Analyze Transaction Timing:** Examine hourly and monthly fraud activity to identify unusual patterns.
+
+5. **Maintain Data Quality:** Continue checking missing values, data types, duplicates, and transaction accuracy.
+
+## 6. Repository Structure
+
+```text
+credit_card_transactions_analysis/
+│
+├── python/
+│   └── README.md
+│
+├── sql/
+│   └── README.md
+│
+├── powerbi/
+│   └── README.md
+│
+├── images/
+│   └── README.md
+│
+├── reports/
+│   └── README.md
+│
+├── data/
+│   └── README.md
+│
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
+
+Additional Python notebooks, SQL scripts, dashboard files, and screenshots are organized within their corresponding folders as they are added to the repository.
+
+## 7. Project Outcomes
+
+This project demonstrates practical experience in:
+
+- Working with datasets exceeding one million records.
+- Building Python ETL workflows.
+- Preparing and validating transaction data.
+- Performing SQL-based financial and fraud analysis.
+- Creating Power BI dashboards.
+- Developing DAX measures.
+- Translating analytical findings into business recommendations.
+- Documenting an end-to-end analytics project using GitHub.
+
+## 8. Future Improvements
+
+- Develop a machine learning model to classify fraudulent transactions.
+- Compare fraud detection models using precision, recall, and F1-score.
+- Automate data validation and reporting.
+- Create additional customer and merchant risk analyses.
+- Expand dashboard interactivity and drill-down reporting.
+
+## Conclusion
+
+The Credit Card Transactions Analysis project demonstrates an end-to-end data analytics workflow using **Python, SQL Server, and Power BI**.
+
+By analyzing over **1.29 million credit card transactions**, the project provides a foundation for understanding fraud activity, transaction trends, and financial patterns.
+
+The project highlights technical skills in ETL, SQL querying, data validation, business intelligence, and communicating analytical insights.
+
+**Project Focus:** Data Analytics | Financial Transactions | Fraud Analysis | Business Intelligence
